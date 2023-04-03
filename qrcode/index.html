@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@2.51.5/dist/full.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <div class="bg-green-500 flex justify-center h-screen items-center">
+        <div class="card bg-base-100 w-96 shadow-xl">
+            <div class="card-body">
+                <h2 class="card-title">QR Code Generator</h2>
+                <input type="text" id="input" class="input input-bordered w-full" placeholder="something.." />
+                <div class="card-actions">
+                    <button id="submit" class="btn btn-block">Submit</button>
+                </div>
+                
+                <div id="result" class="hidden">
+                    <div class="divider"></div>
+                    <div id="qrimage" class="flex justify-center"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let input = document.getElementById('input');
+        let submit = document.getElementById('submit');
+        let result = document.getElementById('result');
+        let qrimage = document.getElementById('qrimage');
+
+        submit.addEventListener('click', function() {
+            // cek kalau input kosong, cursor bakal difokuskan ke input
+            if(!input.value) return input.focus();
+
+            let image = new Image();
+
+            // buat kode qr nya dari api
+            image.src = `https://api.qrserver.com/v1/create-qr-code?size=150x150&data=${input.value}`;
+
+            // kalau image.src itu udah ke load
+            image.onload = function () {
+                // ubah element di dalam #qrimage dengan tag img yang diisi gambar qr code tadi
+                qrimage.innerHTML = `<img src="${image.src}" alt="qr" />`;
+
+                // hilangkan class hidden pada #result agar tag/element apa saja yang ada di dalam #result akan keliatan
+                result.classList.remove("hidden");
+            }
+        })
+    </script>
+</body>
+</html>
